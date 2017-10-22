@@ -1,0 +1,8 @@
+*/Binaries/
+*/Build/
+*/DerivedDataCache
+*/Intermediate/
+*/Saved/
+
+*.VC.db
+EscapeRoom/Content/StarterContent/
