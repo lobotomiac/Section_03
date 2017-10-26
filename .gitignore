@@ -6,4 +6,4 @@
 
 *.VC.db
 EscapeRoom/Content/StarterContent/
-EscapeRoom/.vs/
+*/.vs/

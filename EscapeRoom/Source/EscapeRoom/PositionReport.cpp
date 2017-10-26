@@ -22,7 +22,10 @@ void UPositionReport::BeginPlay()
 	Super::BeginPlay();
 
 	FString ObjectName = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s Position report!"), *ObjectName);
+	FVector ObjectVector = GetOwner()->GetActorLocation();
+	FString ObjectPos = ObjectVector.ToString();
+
+	UE_LOG(LogTemp, Warning, TEXT("%s is at %s"), *ObjectName, *ObjectPos);
 
 }
 
