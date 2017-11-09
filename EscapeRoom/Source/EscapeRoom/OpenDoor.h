@@ -36,8 +36,7 @@ private:
 	// creates trigger for OpenDoor component
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume *PressurePlate = NULL;
-
-	// 
-	UPROPERTY(EditAnywhere)
+ 
+//	UPROPERTY(EditAnywhere)
 	AActor *ActorThatOpens; 
 };

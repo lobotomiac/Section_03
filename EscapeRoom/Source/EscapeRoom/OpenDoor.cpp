@@ -1,6 +1,7 @@
 // nemozenitkodirnitovo
 
 #include "OpenDoor.h"
+#include "Engine/World.h"
 #include "Gameframework/Actor.h"
 
 
@@ -21,6 +22,7 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 }
 
 void UOpenDoor::OpenDoor()
