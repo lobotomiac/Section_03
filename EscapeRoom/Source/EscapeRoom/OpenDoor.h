@@ -23,6 +23,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	void OpenDoor();
+	void CloseDoor();
 
 public:	
 	// Called every frame
@@ -35,8 +36,14 @@ private:
 
 	// creates trigger for OpenDoor component
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume *PressurePlate = NULL;
+	ATriggerVolume *PressurePlate = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	float DoorCloseDelay = 0.5f; // closes door after delay
  
-//	UPROPERTY(EditAnywhere)
-	AActor *ActorThatOpens; 
+	AActor *ActorThatOpens = nullptr;	// remember pawn inherits from actor
+	AActor *Owner;	// finds the owning door
+	
+
+	float LastTimeDoorOpened;
 };
