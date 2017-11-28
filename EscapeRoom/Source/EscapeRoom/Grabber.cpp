@@ -2,6 +2,7 @@
 
 #include "Grabber.h"
 #include "EscapeRoom.h"
+#include "DrawDebugHelpers.h"
 
 
 
@@ -35,8 +36,20 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(PlayerViewPointLocation, PlayerViewPointRotation);
 
-	UE_LOG(LogTemp, Warning, TEXT("%s, %s"),*PlayerViewPointLocation.ToString(), *PlayerViewPointRotation.ToString())
+	//UE_LOG(LogTemp, Warning, TEXT("%s, %s"),*PlayerViewPointLocation.ToString(), *PlayerViewPointRotation.ToString())
 
+	FVector TraceLineEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
+
+	DrawDebugLine(
+		GetWorld(),
+		PlayerViewPointLocation,
+		TraceLineEnd,
+		FColor(0xFF00FF),
+		false,
+		0.f,
+		0,
+		5.f
+	);
 	// Ray-cast out to reach distance (basically a ray from your eye)
 
 	// See what I hit
