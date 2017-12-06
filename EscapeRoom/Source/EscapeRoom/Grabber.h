@@ -29,5 +29,6 @@ public:
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
 	float Reach = 100.f;
+
 	
 };
