@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Grabber.generated.h"
 
 
@@ -28,7 +29,8 @@ public:
 	// declaring containters for view information
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
-	float Reach = 100.f;
 
-	
+private:
+	float Reach = 100.f;
+	UPhysicsHandleComponent *PhysicsHandle = nullptr;
 };
