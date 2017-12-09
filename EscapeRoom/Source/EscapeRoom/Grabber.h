@@ -26,10 +26,6 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	// declaring containters for view information
-	FVector PlayerViewPointLocation;
-	FRotator PlayerViewPointRotation;
-
 private:
 	// how far can the player reach in cm
 	float Reach = 100.f;
@@ -39,4 +35,16 @@ private:
 
 	// Ray cast and grab whats in reach
 	void Grab();
+
+	// Releases the grabbed object (button)
+	void Release();
+
+	// FInd (assumed) attached physics handle
+	void FindPhysicsHandleComponent();
+
+	// Setup (assumed) attached input component
+	void SetupInputComponent();
+
+	// Return hit for first physics body in reach
+	const FHitResult GetFirstPhysicsBodyInReach();
 };
