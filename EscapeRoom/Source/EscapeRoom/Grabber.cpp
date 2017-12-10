@@ -4,8 +4,6 @@
 #include "EscapeRoom.h"
 #include "DrawDebugHelpers.h"
 
-
-
 // Sets default values for this component's properties
 UGrabber::UGrabber()
 {
@@ -21,8 +19,7 @@ void UGrabber::BeginPlay()
 	Super::BeginPlay();
 	
 	FindPhysicsHandleComponent();
-	SetupInputComponent();
-	
+	SetupInputComponent();	
 }
 
 void UGrabber::FindPhysicsHandleComponent()
@@ -74,7 +71,6 @@ void UGrabber::Grab()
 void UGrabber::Release()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Grab released"))
-
 	// Release physics handle
 	PhysicsHandle->ReleaseComponent();
 }
@@ -83,34 +79,17 @@ void UGrabber::Release()
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	FVector PlayerViewPointLocation;
-	FRotator PlayerViewPointRotation;
-
-	// Get Player viewpoint this tick
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(PlayerViewPointLocation, PlayerViewPointRotation);
-	// End of Ray casting or trace line
-	FVector TraceLineEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
-
 	// if the physics handle is attached
 	if (PhysicsHandle->GrabbedComponent)
 	{
 		// Move the object we're holding
-		PhysicsHandle->SetTargetLocation(TraceLineEnd);
+		PhysicsHandle->SetTargetLocation(FGetTraceLineEnd());
 	}
 }
 
 
 const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
 {
-	/// declaring containters for view information
-	FVector PlayerViewPointLocation;
-	FRotator PlayerViewPointRotation;
-
-	// Get Player viewpoint this tick
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(PlayerViewPointLocation, PlayerViewPointRotation);
-	// End of Ray casting or trace line
-	FVector TraceLineEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
 	// Setup query parameters
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
 
@@ -119,7 +98,7 @@ const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
 	GetWorld()->LineTraceSingleByObjectType(
 		Hit,
 		PlayerViewPointLocation,
-		TraceLineEnd,
+		FGetTraceLineEnd(),
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
 		TraceParameters
 	);
@@ -130,4 +109,13 @@ const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
 		UE_LOG(LogTemp, Warning, TEXT("Hitting %s"), *(ActorHit->GetName()))
 	}
 	return Hit;
+}
+
+FVector UGrabber::FGetTraceLineEnd()
+{
+	// Get Player viewpoint this tick
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(PlayerViewPointLocation, PlayerViewPointRotation);
+	// End of Ray casting or trace line
+	FVector TraceLineEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
+	return FGetTraceLineEnd();
 }

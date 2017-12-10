@@ -27,8 +27,11 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
-	// how far can the player reach in cm
+	// How far can the player reach in cm
 	float Reach = 100.f;
+	///  Ray Cast neccesities (view position and orientation)
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
 
 	UPhysicsHandleComponent *PhysicsHandle = nullptr;
 	UInputComponent *InputComponent = nullptr;
@@ -47,4 +50,7 @@ private:
 
 	// Return hit for first physics body in reach
 	const FHitResult GetFirstPhysicsBodyInReach();
+
+	// Return the range of players reach (TraceLine) for interaction purposes
+	FVector FGetTraceLineEnd();
 };
