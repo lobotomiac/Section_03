@@ -51,6 +51,9 @@ private:
 	// Return hit for first physics body in reach
 	const FHitResult GetFirstPhysicsBodyInReach();
 
+	// Return the Trace Line start
+	FVector GetTraceLineStart();
+
 	// Return the range of players reach (TraceLine) for interaction purposes
-	FVector FGetTraceLineEnd();
+	FVector GetTraceLineEnd();		
 };

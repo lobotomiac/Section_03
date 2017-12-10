@@ -17,7 +17,6 @@ UGrabber::UGrabber()
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
-	
 	FindPhysicsHandleComponent();
 	SetupInputComponent();	
 }
@@ -35,7 +34,6 @@ void UGrabber::SetupInputComponent()
 	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
 	if (InputComponent)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s has input handle!"), *(GetOwner()->GetName()))
 		/// Bind the input action
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
 		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
@@ -83,7 +81,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	if (PhysicsHandle->GrabbedComponent)
 	{
 		// Move the object we're holding
-		PhysicsHandle->SetTargetLocation(FGetTraceLineEnd());
+		PhysicsHandle->SetTargetLocation(GetTraceLineEnd());
 	}
 }
 
@@ -94,28 +92,35 @@ const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
 
 	/// Ray-cast (LineTrace) out to reach distance (basically a ray from your eye)
-	FHitResult Hit;
+	FHitResult HitResult;
 	GetWorld()->LineTraceSingleByObjectType(
-		Hit,
-		PlayerViewPointLocation,
-		FGetTraceLineEnd(),
+		HitResult,
+		GetTraceLineStart(),
+		GetTraceLineEnd(),
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
 		TraceParameters
 	);
 	/// See what I hit
-	AActor *ActorHit = Hit.GetActor();
+	AActor *ActorHit = HitResult.GetActor();
 	if (ActorHit)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Hitting %s"), *(ActorHit->GetName()))
 	}
-	return Hit;
+	return HitResult;
 }
 
-FVector UGrabber::FGetTraceLineEnd()
+FVector UGrabber::GetTraceLineStart()
 {
 	// Get Player viewpoint this tick
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(PlayerViewPointLocation, PlayerViewPointRotation);
 	// End of Ray casting or trace line
-	FVector TraceLineEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
-	return FGetTraceLineEnd();
+	return PlayerViewPointLocation;
+}
+
+FVector UGrabber::GetTraceLineEnd()
+{
+	// Get Player viewpoint this tick
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(PlayerViewPointLocation, PlayerViewPointRotation);
+	// End of Ray casting or trace line
+	return PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;	
 }
