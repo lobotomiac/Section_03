@@ -56,4 +56,5 @@ private:
 
 	// Return the range of players reach (TraceLine) for interaction purposes
 	FVector GetTraceLineEnd();		
+	float TotalTriggerMass();
 };

@@ -41,9 +41,10 @@ private:
 	UPROPERTY(EditAnywhere)
 	float DoorCloseDelay = 0.5f; // closes door after delay
  
-	AActor *ActorThatOpens = nullptr;	// remember pawn inherits from actor
-	AActor *Owner;	// finds the owning door
+	AActor *Door;	// finds the owning door
 	
-
 	float LastTimeDoorOpened;
+
+	// total amount of weight on pressure plate
+	float TotalTriggerMass();
 };
