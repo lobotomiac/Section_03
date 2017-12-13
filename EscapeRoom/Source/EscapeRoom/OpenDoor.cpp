@@ -64,10 +64,14 @@ float UOpenDoor::TotalTriggerMass()
 {
 	float TotalMass = 0.f;
 
-	// Find all overlapping actors
 	TArray<AActor*> OverlappingActors;
 	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
-	// iterate through them adding their masses
-
+	
+	for (const auto& Actor : OverlappingActors)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *(Actor->GetName()))
+		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+		UE_LOG(LogTemp, Warning, TEXT("%f"), TotalMass)
+	}
 	return TotalMass;
 }
