@@ -24,13 +24,17 @@ UOpenDoor::UOpenDoor()
 void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
-	Door = GetOwner();
+	Door = GetOwner(); // finds the owning Actor
+	if (!Door) { return; }
+	if (!PressurePlate)
+		UE_LOG(LogTemp, Error, TEXT("%s missing a trigger volume"), *(GetOwner()->GetName()))
 }
 
 void UOpenDoor::OpenDoor()
 {
 	// Set the door rotation
-	Door->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
+	// Door->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
+	OnOpenRequest.Broadcast();
 }
 
 void UOpenDoor::CloseDoor()
@@ -65,9 +69,10 @@ float UOpenDoor::TotalTriggerMass()
 	float TotalMass = 0.f;
 
 	TArray<AActor*> OverlappingActors;
+	if (!PressurePlate)	{	return TotalMass;	}
 	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
 	
-	for (const auto& Actor : OverlappingActors)
+	for (const auto* Actor : OverlappingActors)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *(Actor->GetName()))
 		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();

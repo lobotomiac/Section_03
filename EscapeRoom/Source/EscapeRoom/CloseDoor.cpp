@@ -22,6 +22,10 @@ void UCloseDoor::BeginPlay()
 	Super::BeginPlay();
 
 	ActorThatCloses = GetWorld()->GetFirstPlayerController()->GetPawn();
+	if (!ActorThatCloses)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s missing trigger handle."), *(GetOwner()->GetName()))
+	}
 	
 }
 
@@ -42,6 +46,7 @@ void UCloseDoor::CloseDoor()
 void UCloseDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if (!PressurePlate) { return; }
 
 	if (PressurePlate && PressurePlate->IsOverlappingActor(ActorThatCloses))
 	{
