@@ -30,19 +30,6 @@ void UOpenDoor::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("%s missing a trigger volume"), *(GetOwner()->GetName()))
 }
 
-void UOpenDoor::OpenDoor()
-{
-	// Set the door rotation
-	// Door->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
-	OnOpenRequest.Broadcast();
-}
-
-void UOpenDoor::CloseDoor()
-{
-	// Set the door rotation
-	Door->SetActorRotation(FRotator(0.f, 0.f, 0.f));
-}
-
 
 // Called every frame
 void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -50,17 +37,10 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	Super::TickComponent(DeltaTime,  TickType, ThisTickFunction);
 
 	// Poll the Trigger Volume
-	if (TotalTriggerMass() > 50.f)	// TODO make into a propper parameter
-	{
-		OpenDoor();
-		LastTimeDoorOpened = GetWorld()->GetTimeSeconds();
-	}
-	
-	// check if door need to be closed
-	if ((GetWorld()->GetTimeSeconds()) >= LastTimeDoorOpened + DoorCloseDelay)
-	{
-		CloseDoor();
-	}
+	if (TotalTriggerMass() > TriggerMass)
+		OnOpen.Broadcast();
+	else
+		OnClose.Broadcast();
 }
 
 
@@ -70,6 +50,7 @@ float UOpenDoor::TotalTriggerMass()
 
 	TArray<AActor*> OverlappingActors;
 	if (!PressurePlate)	{	return TotalMass;	}
+
 	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
 	
 	for (const auto* Actor : OverlappingActors)

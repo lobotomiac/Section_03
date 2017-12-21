@@ -8,7 +8,7 @@
 #include "OpenDoor.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenRequest);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDoorEvent);
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -24,34 +24,26 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	void OpenDoor();
-	void CloseDoor();
-
-
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	
 	UPROPERTY(BlueprintAssignable)
-	FOnOpenRequest OnOpenRequest;
+	FDoorEvent OnOpen;
+
+	UPROPERTY(BlueprintAssignable)
+	FDoorEvent OnClose;
 
 private:
-	// creates Unchangable menu in OpenDoor component
-	UPROPERTY(VisibleAnywhere)
-	float OpenAngle = 90.0f;
-
 	// creates trigger for OpenDoor component
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume *PressurePlate = nullptr;
 
-	// Delays the door closing by .f seconds
-	UPROPERTY(EditAnywhere)
-	float DoorCloseDelay = 0.5f;
- 
 	AActor *Door;
 	
-	float LastTimeDoorOpened;
+	UPROPERTY()
+	float TriggerMass = 50;
 
 	// total amount of weight on pressure plate
 	float TotalTriggerMass();
