@@ -48,7 +48,7 @@ float UOpenDoor::TotalTriggerMass()
 {
 	float TotalMass = 0.f;
 
-	TArray<AActor*> OverlappingActors;
+	TArray<AActor* > OverlappingActors;
 	if (!PressurePlate)	{	return TotalMass;	}
 
 	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
