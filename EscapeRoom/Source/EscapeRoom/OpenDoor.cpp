@@ -37,24 +37,27 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	Super::TickComponent(DeltaTime,  TickType, ThisTickFunction);
 
 	// Poll the Trigger Volume
+	
 	if (TotalTriggerMass() > TriggerMass)
 		OnOpen.Broadcast();
 	else
 		OnClose.Broadcast();
+	
 }
 
 
 float UOpenDoor::TotalTriggerMass()
 {
-	float TotalMass = 0.f;
+	float TotalMass = 0.0f;
 
-	TArray<AActor* > OverlappingActors;
+	TArray<AActor*> OverlappingActors;
 	if (!PressurePlate)	{	return TotalMass;	}
-
+	
 	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
 	
 	for (const auto* Actor : OverlappingActors)
 	{
+		// mouse over OverlappingActors
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *(Actor->GetName()))
 		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
 		UE_LOG(LogTemp, Warning, TEXT("%f"), TotalMass)
